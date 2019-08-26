@@ -12,6 +12,7 @@ func ChainId(rpcUrl string) error {
 	if err != nil {
 		return err
 	}
+	defer cli.Close()
 
 	id, err := cli.ChainID(context.Background())
 	if err != nil {

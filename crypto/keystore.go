@@ -12,11 +12,11 @@ import (
 func NewAccount(ksPath string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
 	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("Please input passphrase: ")
+	passphrase, err := t.PromptPassphrase("input passphrase: ")
 	if err != nil {
 		return err
 	}
-	passphrase2, err := t.PromptPassphrase("Please input passphrase again: ")
+	passphrase2, err := t.PromptPassphrase("input passphrase again: ")
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func ListAccount(ksPath string) error {
 func DeleteAccount(ksPath string, account string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
 	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("Please input passphrase: ")
+	passphrase, err := t.PromptPassphrase("passphrase: ")
 	if err != nil {
 		return err
 	}
@@ -52,13 +52,20 @@ func DeleteAccount(ksPath string, account string) error {
 func UpdateAccount(ksPath string, account string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
 	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("Please input old passphrase: ")
+	passphrase, err := t.PromptPassphrase("passphrase: ")
 	if err != nil {
 		return err
 	}
-	passphrase2, err := t.PromptPassphrase("Please input new passphrase: ")
+	passphrase2, err := t.PromptPassphrase("new passphrase: ")
 	if err != nil {
 		return err
+	}
+	passphrase3, err := t.PromptPassphrase("new passphrase again: ")
+	if err != nil {
+		return err
+	}
+	if passphrase3 != passphrase2 {
+		return errors.New("does not match")
 	}
 	return keyStore.Update(accounts.Account{Address: common.HexToAddress(account)}, passphrase, passphrase2)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/caiyesd/ethcli/chain"
 	"github.com/caiyesd/ethcli/crypto"
+	"github.com/caiyesd/ethcli/erc20"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -17,6 +18,7 @@ func main() {
 	app.Commands = []cli.Command{
 		chain.ChainCmd,
 		crypto.CryptoCmd,
+		erc20.Erc20Cmd,
 	}
 	app.RunAndExitOnError()
 }

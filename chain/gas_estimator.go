@@ -15,6 +15,7 @@ func EstimateGas(rpcUrl string, from, to string, gas uint64, gasPrice, value, da
 	if err != nil {
 		return err
 	}
+	defer cli.Close()
 
 	_from := common.HexToAddress(from)
 	var _to *common.Address = nil

@@ -15,6 +15,7 @@ func SendTransaction(rpcUrl string, rawTxStr string) error {
 	if err != nil {
 		return err
 	}
+	defer cli.Close()
 	tx := new(types.Transaction)
 	err = tx.DecodeRLP(rlp.NewStream(bytes.NewBuffer(common.FromHex(rawTxStr)), 0))
 	if err != nil {

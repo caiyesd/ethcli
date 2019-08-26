@@ -8,7 +8,7 @@ var (
 	FlagRpcAddr = cli.StringFlag{
 		Name:  "rpc-addr",
 		Usage: "geth server rpc address: format: http://..., https://..., ws://...",
-		Value: "ws://127.0.0.1:18546",
+		Value: "http://127.0.0.1:8545",
 	}
 	FlagNoPending = cli.BoolTFlag{
 		Name:  "no-pending",

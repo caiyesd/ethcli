@@ -12,6 +12,7 @@ func SuggestGasPrice(rpcUrl string) error {
 	if err != nil {
 		return err
 	}
+	defer cli.Close()
 
 	price, err := cli.SuggestGasPrice(context.Background())
 	if err != nil {

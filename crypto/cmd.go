@@ -49,7 +49,7 @@ var UpdateAccountCmd = cli.Command{
 var DeleteAccountCmd = cli.Command{
 	Name:      "delete",
 	Usage:     "delete an account",
-	UsageText: "update <address>",
+	UsageText: "update <account>",
 	Action:    DeleteAccountAction,
 	Flags:     []cli.Flag{},
 }
@@ -65,7 +65,7 @@ var NewHashCmd = cli.Command{
 var SignHashCmd = cli.Command{
 	Name:      "signhash",
 	Usage:     "sign a hash",
-	UsageText: "sign <address> <hash>",
+	UsageText: "sign <account> <hash>",
 	Action:    SignHashAction,
 	Flags:     []cli.Flag{},
 }
@@ -81,7 +81,7 @@ var NewTxCmd = cli.Command{
 var SignTxCmd = cli.Command{
 	Name:      "signtx",
 	Usage:     "sign a transaction",
-	UsageText: "sign <address> <tx>",
+	UsageText: "sign <account> <tx>",
 	Action:    SignTxAction,
 	Flags:     []cli.Flag{},
 }

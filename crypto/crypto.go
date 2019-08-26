@@ -17,7 +17,7 @@ import (
 func SignHash(ksPath string, account string, hash string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
 	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("Please input passphrase: ")
+	passphrase, err := t.PromptPassphrase("passphrase: ")
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func SignHash(ksPath string, account string, hash string) error {
 func SignTx(ksPath string, account string, rawTxStr string, chainId string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
 	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("Please input passphrase: ")
+	passphrase, err := t.PromptPassphrase("passphrase: ")
 	if err != nil {
 		return err
 	}
