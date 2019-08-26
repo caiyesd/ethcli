@@ -73,7 +73,7 @@ var NonceCmd = cli.Command{
 
 var CodeCmd = cli.Command{
 	Name:      "code",
-	Usage:     "get code of an contract",
+	Usage:     "get code of a contract",
 	UsageText: "code <address> [number]",
 	Action:    CodeAction,
 	Flags:     []cli.Flag{FlagNoPending},
@@ -81,7 +81,7 @@ var CodeCmd = cli.Command{
 
 var StorageCmd = cli.Command{
 	Name:      "storage",
-	Usage:     "get value by key",
+	Usage:     "get storage value of a contract by key",
 	UsageText: "storage <address> <hash> [number]",
 	Action:    StorageAction,
 	Flags:     []cli.Flag{FlagNoPending},
@@ -89,8 +89,8 @@ var StorageCmd = cli.Command{
 
 var SendCmd = cli.Command{
 	Name:      "send",
-	Usage:     "send rawtx",
-	UsageText: "send <rawtx>",
+	Usage:     "send a transaction",
+	UsageText: "send <tx>",
 	Action:    SendAction,
 	Flags:     []cli.Flag{},
 }

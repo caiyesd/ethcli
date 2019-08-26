@@ -40,7 +40,7 @@ var ListAccountCmd = cli.Command{
 
 var UpdateAccountCmd = cli.Command{
 	Name:      "update",
-	Usage:     "update account",
+	Usage:     "update an account",
 	UsageText: "update <address>",
 	Action:    UpdateAccountAction,
 	Flags:     []cli.Flag{},
@@ -48,7 +48,7 @@ var UpdateAccountCmd = cli.Command{
 
 var DeleteAccountCmd = cli.Command{
 	Name:      "delete",
-	Usage:     "delete account",
+	Usage:     "delete an account",
 	UsageText: "update <address>",
 	Action:    DeleteAccountAction,
 	Flags:     []cli.Flag{},
@@ -56,7 +56,7 @@ var DeleteAccountCmd = cli.Command{
 
 var NewHashCmd = cli.Command{
 	Name:      "hash",
-	Usage:     "calculate keccak256 hash of the data",
+	Usage:     "calculate keccak256 hash of data",
 	UsageText: "hash <data>",
 	Action:    NewHashAction,
 	Flags:     []cli.Flag{},
@@ -64,7 +64,7 @@ var NewHashCmd = cli.Command{
 
 var SignHashCmd = cli.Command{
 	Name:      "signhash",
-	Usage:     "sign hash",
+	Usage:     "sign a hash",
 	UsageText: "sign <address> <hash>",
 	Action:    SignHashAction,
 	Flags:     []cli.Flag{},
@@ -80,7 +80,7 @@ var NewTxCmd = cli.Command{
 
 var SignTxCmd = cli.Command{
 	Name:      "signtx",
-	Usage:     "sign transaction",
+	Usage:     "sign a transaction",
 	UsageText: "sign <address> <tx>",
 	Action:    SignTxAction,
 	Flags:     []cli.Flag{},
@@ -88,7 +88,7 @@ var SignTxCmd = cli.Command{
 
 var VerifyCmd = cli.Command{
 	Name:      "verify",
-	Usage:     "verify signature",
+	Usage:     "verify a signature",
 	UsageText: "verify <pubkey> <hash> <sig>",
 	Action:    VerifyAction,
 	Flags:     []cli.Flag{},
@@ -96,7 +96,7 @@ var VerifyCmd = cli.Command{
 
 var EcrecoverCmd = cli.Command{
 	Name:      "ecrecover",
-	Usage:     "recover address from signature",
+	Usage:     "recover address from a signature",
 	UsageText: "ecrecover <hash> <sig>",
 	Action:    EcrecoverAction,
 	Flags:     []cli.Flag{},
