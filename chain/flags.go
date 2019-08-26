@@ -6,7 +6,7 @@ import (
 
 var (
 	FlagRpcAddr = cli.StringFlag{
-		Name:  "rpc-addr",
+		Name:  "rpc",
 		Usage: "geth server rpc address: format: http://..., https://..., ws://...",
 		Value: "http://127.0.0.1:8545",
 	}

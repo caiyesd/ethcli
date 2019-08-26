@@ -9,7 +9,7 @@ import (
 
 var (
 	FlagKeystore = cli.StringFlag{
-		Name:  "keystore",
+		Name:  "ks",
 		Usage: "keystore directory",
 		Value: DefaultKeystore(),
 	}
