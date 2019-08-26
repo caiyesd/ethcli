@@ -16,6 +16,19 @@ func printReceipt(r *types.Receipt) {
 	fmt.Printf("GasUsed:         %d\n", r.GasUsed)
 	fmt.Printf("Status:          %d\n", r.Status)
 	fmt.Printf("TxHash:          %s\n", r.TxHash.String())
+	fmt.Printf("Logs:            %d\n", len(r.Logs))
+	if len(r.Logs) > 0 {
+		for id, vlog := range r.Logs {
+			fmt.Printf("Log[%d]:\n", id)
+			fmt.Printf("  Address:  %s\n", vlog.Address.String())
+			fmt.Printf("  Topic:    %d\n", len(vlog.Topics))
+			for _, topic := range vlog.Topics {
+				fmt.Printf("            %s\n", topic.String())
+			}
+			fmt.Printf("  Data:    %s\n", common.ToHex(vlog.Data))
+			fmt.Printf("  Removed: %v\n", vlog.Removed)
+		}
+	}
 }
 
 func TransactionByHash(rpcUrl string, hash string) error {

@@ -22,6 +22,7 @@ func DefaultHome() string {
 	}
 	return home
 }
+
 func DefaultKeystore() string {
 	return filepath.Join(DefaultHome(), ".ethereum", "keystore")
 }

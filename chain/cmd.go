@@ -1,13 +1,8 @@
 package chain
 
 import (
-	"errors"
-
 	cli "gopkg.in/urfave/cli.v1"
 )
-
-var ErrInvalidArgs = errors.New("invalid arguments")
-var ErrInvalidAmount = errors.New("invalid amount")
 
 var ChainCmd = cli.Command{
 	Name:  "chain",
@@ -18,13 +13,15 @@ var ChainCmd = cli.Command{
 		BlockCmd,
 		TransactionCmd,
 		ReceiptCmd,
-		SubNewHeaderCmd,
 		BalanceCmd,
 		NonceCmd,
 		CodeCmd,
 		StorageCmd,
-		RawTxCmd,
 		SendCmd,
+		CallCmd,
+		GasCmd,
+		PriceCmd,
+		ChainIdCmd,
 	},
 }
 
@@ -41,14 +38,6 @@ var HeaderCmd = cli.Command{
 	Usage:     "get header by number or hash",
 	UsageText: "header [number|hash]",
 	Action:    HeaderAction,
-	Flags:     []cli.Flag{},
-}
-
-var SubNewHeaderCmd = cli.Command{
-	Name:      "sub",
-	Usage:     "sub new header",
-	UsageText: "sub",
-	Action:    SubNewHeaderAction,
 	Flags:     []cli.Flag{},
 }
 
@@ -98,18 +87,42 @@ var StorageCmd = cli.Command{
 	Flags:     []cli.Flag{FlagNoPending},
 }
 
-var RawTxCmd = cli.Command{
-	Name:      "rawtx",
-	Usage:     "build rawtx",
-	UsageText: "rawtx <nonce> <to> <amount> <gasLimit> <gasPrice> <data>",
-	Action:    RawTxAction,
-	Flags:     []cli.Flag{},
-}
-
 var SendCmd = cli.Command{
 	Name:      "send",
 	Usage:     "send rawtx",
 	UsageText: "send <rawtx>",
 	Action:    SendAction,
+	Flags:     []cli.Flag{},
+}
+
+var CallCmd = cli.Command{
+	Name:      "call",
+	Usage:     "call contract",
+	UsageText: "call <from> <to> <gas> <gasPrice> <value> <data> [number]",
+	Action:    CallAction,
+	Flags:     []cli.Flag{FlagNoPending},
+}
+
+var GasCmd = cli.Command{
+	Name:      "gas",
+	Usage:     "estimate gas",
+	UsageText: "gas <from> <to> <gas> <gasPrice> <value> <data>",
+	Action:    EstimateGasAction,
+	Flags:     []cli.Flag{},
+}
+
+var PriceCmd = cli.Command{
+	Name:      "price",
+	Usage:     "get suggested gas price",
+	UsageText: "price",
+	Action:    SuggestGasPriceAction,
+	Flags:     []cli.Flag{},
+}
+
+var ChainIdCmd = cli.Command{
+	Name:      "id",
+	Usage:     "get chain id",
+	UsageText: "id",
+	Action:    ChainIdAction,
 	Flags:     []cli.Flag{},
 }

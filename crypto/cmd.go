@@ -1,13 +1,8 @@
 package crypto
 
 import (
-	"errors"
-
 	cli "gopkg.in/urfave/cli.v1"
 )
-
-var ErrInvalidArgs = errors.New("invalid arguments")
-var ErrInvalidAmount = errors.New("invalid amount")
 
 var CryptoCmd = cli.Command{
 	Name:  "crypto",
@@ -18,6 +13,12 @@ var CryptoCmd = cli.Command{
 		ListAccountCmd,
 		UpdateAccountCmd,
 		DeleteAccountCmd,
+		NewHashCmd,
+		SignHashCmd,
+		NewTxCmd,
+		SignTxCmd,
+		VerifyCmd,
+		EcrecoverCmd,
 	},
 }
 
@@ -50,5 +51,53 @@ var DeleteAccountCmd = cli.Command{
 	Usage:     "delete account",
 	UsageText: "update <address>",
 	Action:    DeleteAccountAction,
+	Flags:     []cli.Flag{},
+}
+
+var NewHashCmd = cli.Command{
+	Name:      "hash",
+	Usage:     "calculate keccak256 hash of the data",
+	UsageText: "hash <data>",
+	Action:    NewHashAction,
+	Flags:     []cli.Flag{},
+}
+
+var SignHashCmd = cli.Command{
+	Name:      "signhash",
+	Usage:     "sign hash",
+	UsageText: "sign <address> <hash>",
+	Action:    SignHashAction,
+	Flags:     []cli.Flag{},
+}
+
+var NewTxCmd = cli.Command{
+	Name:      "tx",
+	Usage:     "create a new tx",
+	UsageText: "tx <nonce> <to> <value> <gasLimit> <gasPrice> [data]",
+	Action:    NewTxAction,
+	Flags:     []cli.Flag{},
+}
+
+var SignTxCmd = cli.Command{
+	Name:      "signtx",
+	Usage:     "sign transaction",
+	UsageText: "sign <address> <tx>",
+	Action:    SignTxAction,
+	Flags:     []cli.Flag{},
+}
+
+var VerifyCmd = cli.Command{
+	Name:      "verify",
+	Usage:     "verify signature",
+	UsageText: "verify <pubkey> <hash> <sig>",
+	Action:    VerifyAction,
+	Flags:     []cli.Flag{},
+}
+
+var EcrecoverCmd = cli.Command{
+	Name:      "ecrecover",
+	Usage:     "recover address from signature",
+	UsageText: "ecrecover <hash> <sig>",
+	Action:    EcrecoverAction,
 	Flags:     []cli.Flag{},
 }

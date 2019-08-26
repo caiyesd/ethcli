@@ -1,6 +1,7 @@
 package chain
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 
@@ -12,7 +13,7 @@ func BlockAction(c *cli.Context) error {
 		return BlockByNumber(c.Parent().String(FlagRpcAddr.Name), math.MaxUint64)
 	} else {
 		if c.NArg() < 1 {
-			return ErrInvalidArgs
+			return fmt.Errorf("insufficient arguments")
 		}
 		number, err := strconv.ParseUint(c.Args()[0], 10, 64)
 		if err != nil {
@@ -28,7 +29,7 @@ func HeaderAction(c *cli.Context) error {
 		return HeaderByNumber(c.Parent().String(FlagRpcAddr.Name), math.MaxUint64)
 	} else {
 		if c.NArg() < 1 {
-			return ErrInvalidArgs
+			return fmt.Errorf("insufficient arguments")
 		}
 		number, err := strconv.ParseUint(c.Args()[0], 10, 64)
 		if err != nil {
@@ -45,21 +46,21 @@ func SubNewHeaderAction(c *cli.Context) error {
 
 func TransactionAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	return TransactionByHash(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
 }
 
 func ReceiptAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	return TransactionReceipt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
 }
 
 func BalanceAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	if c.BoolT(FlagNoPending.Name) {
 		if c.NArg() < 2 {
@@ -74,94 +75,130 @@ func BalanceAction(c *cli.Context) error {
 	} else {
 		return PendingBalanceAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
 	}
-
-	return nil
 }
 
 func NonceAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	if c.BoolT(FlagNoPending.Name) {
 		if c.NArg() < 2 {
-			BalanceAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], math.MaxUint64)
+			return NonceAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], math.MaxUint64)
 		} else {
 			number, err := strconv.ParseUint(c.Args()[1], 10, 64)
 			if err != nil {
 				return err
 			}
-			NonceAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], number)
+			return NonceAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], number)
 		}
 	} else {
 		return PendingNonceAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
 	}
-
-	return nil
 }
 
 func CodeAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	if c.BoolT(FlagNoPending.Name) {
 		if c.NArg() < 2 {
-			CodeAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], math.MaxUint64)
+			return CodeAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], math.MaxUint64)
 		} else {
 			number, err := strconv.ParseUint(c.Args()[1], 10, 64)
 			if err != nil {
 				return err
 			}
-			CodeAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], number)
+			return CodeAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], number)
 		}
 	} else {
 		return PendingCodeAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
 	}
-
-	return nil
 }
 
 func StorageAction(c *cli.Context) error {
 	if c.NArg() < 2 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	if c.BoolT(FlagNoPending.Name) {
 		if c.NArg() < 3 {
-			StorageAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], c.Args()[1], math.MaxUint64)
+			return StorageAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], c.Args()[1], math.MaxUint64)
 		} else {
 			number, err := strconv.ParseUint(c.Args()[2], 10, 64)
 			if err != nil {
 				return err
 			}
-			StorageAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], c.Args()[1], number)
+			return StorageAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], c.Args()[1], number)
 		}
 	} else {
 		return PendingStorageAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0], c.Args()[1])
 	}
-	return nil
-}
-
-func RawTxAction(c *cli.Context) error {
-	if c.NArg() < 6 {
-		return ErrInvalidArgs
-	}
-	nonce, err := strconv.ParseUint(c.Args()[0], 10, 64)
-	if err != nil {
-		return err
-	}
-	to := c.Args()[1]
-	amount := c.Args()[2]
-	gasLimit, err := strconv.ParseUint(c.Args()[3], 10, 64)
-	if err != nil {
-		return err
-	}
-	gasPrice := c.Args()[4]
-	data := c.Args()[5]
-	return BuildTransaction(nonce, to, amount, gasLimit, gasPrice, data)
 }
 
 func SendAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return ErrInvalidArgs
+		return fmt.Errorf("insufficient arguments")
 	}
 	return SendTransaction(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
+}
+
+func CallAction(c *cli.Context) error {
+	if c.NArg() < 6 {
+		return fmt.Errorf("insufficient arguments")
+	}
+	gas, err := strconv.ParseUint(c.Args()[2], 10, 64)
+	if err != nil {
+		return err
+	}
+	if c.BoolT(FlagNoPending.Name) {
+		if c.NArg() < 7 {
+			return CallContract(c.Parent().String(FlagRpcAddr.Name),
+				c.Args()[0],
+				c.Args()[1],
+				gas,
+				c.Args()[3],
+				c.Args()[4],
+				c.Args()[5],
+				math.MaxUint64)
+		} else {
+			number, err := strconv.ParseUint(c.Args()[6], 10, 64)
+			if err != nil {
+				return err
+			}
+			return CallContract(c.Parent().String(FlagRpcAddr.Name),
+				c.Args()[0],
+				c.Args()[1],
+				gas,
+				c.Args()[3],
+				c.Args()[4],
+				c.Args()[5],
+				number)
+		}
+	} else {
+		return PendingCodeAt(c.Parent().String(FlagRpcAddr.Name), c.Args()[0])
+	}
+}
+
+func EstimateGasAction(c *cli.Context) error {
+	if c.NArg() < 6 {
+		return fmt.Errorf("insufficient arguments")
+	}
+	gas, err := strconv.ParseUint(c.Args()[2], 10, 64)
+	if err != nil {
+		return err
+	}
+
+	return EstimateGas(c.Parent().String(FlagRpcAddr.Name), c.Args()[0],
+		c.Args()[1],
+		gas,
+		c.Args()[3],
+		c.Args()[4],
+		c.Args()[5])
+}
+
+func SuggestGasPriceAction(c *cli.Context) error {
+	return SuggestGasPrice(c.Parent().String(FlagRpcAddr.Name))
+}
+
+func ChainIdAction(c *cli.Context) error {
+	return ChainId(c.Parent().String(FlagRpcAddr.Name))
 }
