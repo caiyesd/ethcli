@@ -34,7 +34,12 @@ func printHeader(h *types.Header) {
 func printTransaction(tx *types.Transaction) {
 	fmt.Printf("Hash:      %s\n", tx.Hash().String())
 	fmt.Printf("Nonce:     %d\n", tx.Nonce())
-	fmt.Printf("To:        %s\n", tx.To().String())
+	if tx.To() == nil {
+		fmt.Printf("To:        %s\n", tx.To())
+	} else {
+		fmt.Printf("To:        %s\n", tx.To().String())
+	}
+
 	fmt.Printf("Value:     %s\n", tx.Value())
 	fmt.Printf("Gas:       %d\n", tx.Gas())
 	fmt.Printf("GasPrice:  %s\n", tx.GasPrice())

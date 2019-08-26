@@ -22,7 +22,7 @@ func TotalSupplyAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func BalanceOfAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func AllowanceAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func TransferAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func TransferFromAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -179,7 +179,7 @@ func ApproveAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -223,7 +223,7 @@ func PausedAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -244,7 +244,7 @@ func IsPauserAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -265,7 +265,7 @@ func AddPauserAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -307,7 +307,7 @@ func RenouncePauserAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -349,7 +349,7 @@ func PauseAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -391,7 +391,7 @@ func UnpauseAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -433,7 +433,7 @@ func IsMinterAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -454,7 +454,7 @@ func MintAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -501,7 +501,7 @@ func AddMinterAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -543,7 +543,7 @@ func RenounceMinterAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -585,7 +585,7 @@ func BurnAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
@@ -632,7 +632,7 @@ func BurnFromAction(c *cli.Context) error {
 		return err
 	}
 	defer cli.Close()
-	erc20, err := NewErc20(common.HexToAddress(FlagErc20Addr.Name), cli)
+	erc20, err := NewErc20(common.HexToAddress(c.Parent().String(FlagErc20Addr.Name)), cli)
 	if err != nil {
 		return err
 	}
