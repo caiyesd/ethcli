@@ -26,7 +26,6 @@ func printReceipt(r *types.Receipt) {
 		fmt.Printf("  Data:          %s\n", common.ToHex(vlog.Data))
 		fmt.Printf("  Removed:       %v\n", vlog.Removed)
 	}
-
 }
 
 func TransactionByHash(rpcUrl string, hash string) error {
