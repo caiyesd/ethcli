@@ -3,16 +3,12 @@ package erc20
 import (
 	"context"
 	"fmt"
-	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-
 	"github.com/ethereum/go-ethereum/accounts/keystore"
-
-	"github.com/ethereum/go-ethereum/ethclient"
-
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -114,9 +110,9 @@ func TransferAction(c *cli.Context) error {
 		return err
 	}
 
-	value, ok := new(big.Int).SetString(c.Args()[2], 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", c.Args()[2])
+	value, err := ParseBigInt(c.Args()[2])
+	if err != nil {
+		return err
 	}
 
 	tx, err := erc20.Transfer(auth, common.HexToAddress(c.Args()[1]), value)
@@ -161,9 +157,9 @@ func TransferFromAction(c *cli.Context) error {
 		return err
 	}
 
-	value, ok := new(big.Int).SetString(c.Args()[3], 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", c.Args()[3])
+	value, err := ParseBigInt(c.Args()[3])
+	if err != nil {
+		return err
 	}
 
 	tx, err := erc20.TransferFrom(auth, common.HexToAddress(c.Args()[1]), common.HexToAddress(c.Args()[2]), value)
@@ -208,9 +204,9 @@ func ApproveAction(c *cli.Context) error {
 		return err
 	}
 
-	value, ok := new(big.Int).SetString(c.Args()[2], 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", c.Args()[2])
+	value, err := ParseBigInt(c.Args()[2])
+	if err != nil {
+		return err
 	}
 
 	tx, err := erc20.Approve(auth, common.HexToAddress(c.Args()[1]), value)
@@ -483,11 +479,10 @@ func MintAction(c *cli.Context) error {
 		return err
 	}
 
-	value, ok := new(big.Int).SetString(c.Args()[2], 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", c.Args()[2])
+	value, err := ParseBigInt(c.Args()[2])
+	if err != nil {
+		return err
 	}
-
 	tx, err := erc20.Mint(auth, common.HexToAddress(c.Args()[1]), value)
 	if err != nil {
 		return err
@@ -614,9 +609,9 @@ func BurnAction(c *cli.Context) error {
 		return err
 	}
 
-	value, ok := new(big.Int).SetString(c.Args()[1], 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", c.Args()[1])
+	value, err := ParseBigInt(c.Args()[1])
+	if err != nil {
+		return err
 	}
 
 	tx, err := erc20.Burn(auth, value)
@@ -661,9 +656,9 @@ func BurnFromAction(c *cli.Context) error {
 		return err
 	}
 
-	value, ok := new(big.Int).SetString(c.Args()[2], 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", c.Args()[2])
+	value, err := ParseBigInt(c.Args()[2])
+	if err != nil {
+		return err
 	}
 
 	tx, err := erc20.BurnFrom(auth, common.HexToAddress(c.Args()[1]), value)

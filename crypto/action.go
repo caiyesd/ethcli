@@ -73,3 +73,10 @@ func EcrecoverAction(c *cli.Context) error {
 	}
 	return Ecrecover(c.Args()[0], c.Args()[1])
 }
+
+func PackAction(c *cli.Context) error {
+	if c.NArg()%2 != 0 {
+		return ErrInsufficientArguments
+	}
+	return PackArguments([]string(c.Args()))
+}

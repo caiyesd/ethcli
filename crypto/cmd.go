@@ -15,6 +15,7 @@ var CryptoCmd = cli.Command{
 		SignTxCmd,
 		VerifyCmd,
 		EcrecoverCmd,
+		PackCmd,
 	},
 }
 
@@ -63,5 +64,13 @@ var EcrecoverCmd = cli.Command{
 	Usage:     "recover address from a signature",
 	UsageText: "ecrecover <hash> <sig>",
 	Action:    EcrecoverAction,
+	Flags:     []cli.Flag{},
+}
+
+var PackCmd = cli.Command{
+	Name:      "pack",
+	Usage:     "pack arguments",
+	UsageText: "pack <type0> <arg0> <type1> <arg1> ...",
+	Action:    PackAction,
 	Flags:     []cli.Flag{},
 }

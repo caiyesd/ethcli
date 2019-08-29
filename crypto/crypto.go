@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/ethereum/go-ethereum/accounts/abi"
+
 	"github.com/ethereum/go-ethereum/crypto"
 
 	"github.com/ethereum/go-ethereum/accounts"
@@ -71,5 +73,51 @@ func Ecrecover(hash string, sig string) error {
 		return err
 	}
 	fmt.Println(crypto.PubkeyToAddress(*pub).String())
+	return nil
+}
+
+func PackArguments(args []string) error {
+	arguments := abi.Arguments{}
+	values := []interface{}{}
+	for i := 0; i < len(args)/2; i++ {
+		_type, err := abi.NewType(args[i*2], nil)
+		if err != nil {
+			return err
+		}
+		arguments = append(arguments, abi.Argument{Type: _type})
+		switch args[i*2] {
+		case "address":
+			values = append(values, common.HexToAddress(args[i*2+1]))
+			break
+		case "bytes":
+			values = append(values, common.FromHex(args[i*2+1]))
+			break
+		case "bytes32":
+			values = append(values, common.HexToHash(args[i*2+1]))
+			break
+		case "uint64":
+			value, err := ParseUint64(args[i*2+1])
+			if err != nil {
+				return err
+			}
+			values = append(values, value)
+			break
+		case "uint256":
+			value, err := ParseBigInt(args[i*2+1])
+			if err != nil {
+				return err
+			}
+			values = append(values, value)
+			break
+
+		default:
+			return fmt.Errorf("unsupported type %s", args[i*2])
+		}
+	}
+	data, err := arguments.Pack(values...)
+	if err != nil {
+		return err
+	}
+	fmt.Println(common.ToHex(data))
 	return nil
 }
