@@ -14,13 +14,8 @@ import (
 	"github.com/ethereum/go-ethereum/rlp"
 )
 
-func SignHash(ksPath string, account string, hash string) error {
+func SignHash(ksPath string, account, passphrase string, hash string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
-	if err != nil {
-		return err
-	}
 	h := common.HexToHash(hash)
 	sig, err := keyStore.SignHashWithPassphrase(accounts.Account{Address: common.HexToAddress(account)}, passphrase, h[:])
 	if err != nil {
@@ -30,23 +25,18 @@ func SignHash(ksPath string, account string, hash string) error {
 	return nil
 }
 
-func SignTx(ksPath string, account string, rawTxStr string, chainId string) error {
+func SignTx(ksPath string, account, passphrase string, rawTxStr string, chainId string) error {
 	keyStore := keystore.NewKeyStore(ksPath, keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
-	if err != nil {
-		return err
-	}
 	tx := new(types.Transaction)
-	err = tx.DecodeRLP(rlp.NewStream(bytes.NewBuffer(common.FromHex(rawTxStr)), 0))
+	err := tx.DecodeRLP(rlp.NewStream(bytes.NewBuffer(common.FromHex(rawTxStr)), 0))
 	if err != nil {
 		return err
 	}
 	var _chainId *big.Int = nil
 	if chainId != "" {
-		tmp, ok := new(big.Int).SetString(chainId, 10)
-		if !ok {
-			return fmt.Errorf("failed to parse %s", chainId)
+		tmp, err := ParseBigInt(chainId)
+		if err != nil {
+			return err
 		}
 		_chainId = tmp
 	}

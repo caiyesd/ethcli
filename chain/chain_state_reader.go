@@ -3,22 +3,24 @@ package chain
 import (
 	"context"
 	"fmt"
-	"math"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func BalanceAt(rpcUrl string, account string, number uint64) error {
+func BalanceAt(rpcUrl, account, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 	balance, err := cli.BalanceAt(context.Background(), common.HexToAddress(account), num)
 	if err != nil {
@@ -28,15 +30,18 @@ func BalanceAt(rpcUrl string, account string, number uint64) error {
 	return nil
 }
 
-func NonceAt(rpcUrl string, account string, number uint64) error {
+func NonceAt(rpcUrl, account, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 	nonce, err := cli.NonceAt(context.Background(), common.HexToAddress(account), num)
 	if err != nil {
@@ -46,15 +51,18 @@ func NonceAt(rpcUrl string, account string, number uint64) error {
 	return nil
 }
 
-func CodeAt(rpcUrl string, account string, number uint64) error {
+func CodeAt(rpcUrl, account, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 	code, err := cli.CodeAt(context.Background(), common.HexToAddress(account), num)
 	if err != nil {
@@ -64,15 +72,18 @@ func CodeAt(rpcUrl string, account string, number uint64) error {
 	return nil
 }
 
-func StorageAt(rpcUrl string, account string, key string, number uint64) error {
+func StorageAt(rpcUrl, account, key, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 	data, err := cli.StorageAt(context.Background(), common.HexToAddress(account), common.HexToHash(key), num)
 	if err != nil {

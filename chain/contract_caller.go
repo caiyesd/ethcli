@@ -3,7 +3,6 @@ package chain
 import (
 	"context"
 	"fmt"
-	"math"
 	"math/big"
 
 	ethereum "github.com/ethereum/go-ethereum"
@@ -11,37 +10,50 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func CallContract(rpcUrl string, from, to string, gas uint64, gasPrice, value, data string, number uint64) error {
+func CallContract(rpcUrl, from, to, gas, gasPrice, value, data, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 
 	_from := common.HexToAddress(from)
+
 	var _to *common.Address = nil
 	if to != "" {
 		tmp := common.HexToAddress(to)
 		_to = &tmp
 	}
-	_gasPrice, ok := new(big.Int).SetString(gasPrice, 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", gasPrice)
+
+	_gas, err := ParseUint64(gas)
+	if err != nil {
+		return err
 	}
-	_value, ok := new(big.Int).SetString(value, 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", value)
+
+	_gasPrice, err := ParseBigInt(gasPrice)
+	if err != nil {
+		return err
 	}
+
+	_value, err := ParseBigInt(value)
+	if err != nil {
+		return err
+	}
+
 	_data := common.FromHex(data)
 
 	result, err := cli.CallContract(context.Background(), ethereum.CallMsg{
 		From:     _from,
 		To:       _to,
-		Gas:      gas,
+		Gas:      _gas,
 		GasPrice: _gasPrice,
 		Value:    _value,
 		Data:     _data,

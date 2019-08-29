@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/caiyesd/ethcli/account"
 	"github.com/caiyesd/ethcli/chain"
 	"github.com/caiyesd/ethcli/crypto"
 	"github.com/caiyesd/ethcli/erc20"
@@ -16,6 +17,7 @@ func main() {
 	app.Description = "the client of geth"
 	app.Flags = []cli.Flag{}
 	app.Commands = []cli.Command{
+		account.AccountCmd,
 		chain.ChainCmd,
 		crypto.CryptoCmd,
 		erc20.Erc20Cmd,

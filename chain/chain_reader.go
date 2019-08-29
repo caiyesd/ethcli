@@ -3,7 +3,6 @@ package chain
 import (
 	"context"
 	"fmt"
-	"math"
 	"math/big"
 	"os"
 	"os/signal"
@@ -56,7 +55,7 @@ func printTransaction(tx *types.Transaction) {
 	fmt.Printf("Signature: %s\n", common.ToHex(sig[:]))
 }
 
-func HeaderByHash(rpcUrl string, hash string) error {
+func HeaderByHash(rpcUrl, hash string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -70,7 +69,7 @@ func HeaderByHash(rpcUrl string, hash string) error {
 	return nil
 }
 
-func BlockByHash(rpcUrl string, hash string) error {
+func BlockByHash(rpcUrl, hash string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -84,7 +83,7 @@ func BlockByHash(rpcUrl string, hash string) error {
 	return nil
 }
 
-func TransactionCount(rpcUrl string, hash string) error {
+func TransactionCount(rpcUrl, hash string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -95,15 +94,18 @@ func TransactionCount(rpcUrl string, hash string) error {
 	return nil
 }
 
-func HeaderByNumber(rpcUrl string, number uint64) error {
+func HeaderByNumber(rpcUrl, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 	header, err := cli.HeaderByNumber(context.Background(), num)
 	if err != nil {
@@ -113,15 +115,18 @@ func HeaderByNumber(rpcUrl string, number uint64) error {
 	return nil
 }
 
-func BlockByNumber(rpcUrl string, number uint64) error {
+func BlockByNumber(rpcUrl, number string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
 	}
 	defer cli.Close()
-	var num *big.Int
-	if number != math.MaxUint64 {
-		num = new(big.Int).SetUint64(number)
+	var num *big.Int = nil
+	if number != "" {
+		num, err = ParseBigInt(number)
+		if err != nil {
+			return err
+		}
 	}
 	block, err := cli.BlockByNumber(context.Background(), num)
 	if err != nil {
@@ -131,7 +136,7 @@ func BlockByNumber(rpcUrl string, number uint64) error {
 	return nil
 }
 
-func TransactionInBlock(rpcUrl string, hash string, index uint) error {
+func TransactionInBlock(rpcUrl, hash string, index uint) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err

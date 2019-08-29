@@ -6,59 +6,23 @@ import (
 
 var CryptoCmd = cli.Command{
 	Name:  "crypto",
-	Usage: "manage and use keystore",
-	Flags: []cli.Flag{FlagKeystore},
+	Usage: "crypto operations",
+	Flags: []cli.Flag{FlagKeystore, FlagPassword},
 	Subcommands: []cli.Command{
-		NewAccountCmd,
-		ListAccountCmd,
-		UpdateAccountCmd,
-		DeleteAccountCmd,
-		NewHashCmd,
+		CalcHashCmd,
 		SignHashCmd,
-		NewTxCmd,
+		BuildTxCmd,
 		SignTxCmd,
 		VerifyCmd,
 		EcrecoverCmd,
 	},
 }
 
-var NewAccountCmd = cli.Command{
-	Name:      "new",
-	Usage:     "generate a new account",
-	UsageText: "new",
-	Action:    NewAccountAction,
-	Flags:     []cli.Flag{},
-}
-
-var ListAccountCmd = cli.Command{
-	Name:      "list",
-	Usage:     "list accounts",
-	UsageText: "list",
-	Action:    ListAccountAction,
-	Flags:     []cli.Flag{},
-}
-
-var UpdateAccountCmd = cli.Command{
-	Name:      "update",
-	Usage:     "update an account",
-	UsageText: "update <address>",
-	Action:    UpdateAccountAction,
-	Flags:     []cli.Flag{},
-}
-
-var DeleteAccountCmd = cli.Command{
-	Name:      "delete",
-	Usage:     "delete an account",
-	UsageText: "update <account>",
-	Action:    DeleteAccountAction,
-	Flags:     []cli.Flag{},
-}
-
-var NewHashCmd = cli.Command{
+var CalcHashCmd = cli.Command{
 	Name:      "hash",
 	Usage:     "calculate keccak256 hash of data",
 	UsageText: "hash <data>",
-	Action:    NewHashAction,
+	Action:    CalcHashAction,
 	Flags:     []cli.Flag{},
 }
 
@@ -70,11 +34,11 @@ var SignHashCmd = cli.Command{
 	Flags:     []cli.Flag{},
 }
 
-var NewTxCmd = cli.Command{
+var BuildTxCmd = cli.Command{
 	Name:      "tx",
-	Usage:     "create a new tx",
+	Usage:     "build a new tx",
 	UsageText: "tx <nonce> <to> <value> <gasLimit> <gasPrice> [data]",
-	Action:    NewTxAction,
+	Action:    BuildTxAction,
 	Flags:     []cli.Flag{},
 }
 

@@ -19,8 +19,14 @@ type Executor interface {
 	Execute(handler ExecutorHandler) error
 }
 
+// ------------------------------------------------------
+
 type ChainExecutor struct {
 	rpcUrl string
+}
+
+func NewChainExecutor(rpcUrl string) Executor {
+	return &ChainExecutor{rpcUrl}
 }
 
 func (e *ChainExecutor) Execute(handler ExecutorHandler) error {
@@ -32,6 +38,8 @@ func (e *ChainExecutor) Execute(handler ExecutorHandler) error {
 	return handler(cli, nil)
 }
 
+// ------------------------------------------------------
+
 type ContractExecutorWithKeystore struct {
 	ChainExecutor
 	keystoreDir string
@@ -39,49 +47,42 @@ type ContractExecutorWithKeystore struct {
 	passphrase  string
 }
 
-type ContractExecutor struct {
+func NewContractExecutorWithKeystore(rpcUrl string, keystoreDir string, account string, passphrase string) Executor {
+	return &ContractExecutorWithKeystore{ChainExecutor{rpcUrl}, keystoreDir, common.HexToAddress(account), passphrase}
+}
+
+func (e *ContractExecutorWithKeystore) Execute(handler ExecutorHandler) error {
+	h := func(cli *ethclient.Client, auth *bind.TransactOpts) error {
+		tmp := accounts.Account{Address: e.account}
+		keyStore := keystore.NewKeyStore(e.keystoreDir, keystore.StandardScryptN, keystore.StandardScryptP)
+		err := keyStore.Unlock(tmp, e.passphrase)
+		if err != nil {
+			return err
+		}
+		defer keyStore.Lock(e.account)
+		return handler(cli, auth)
+	}
+	return e.ChainExecutor.Execute(h)
+}
+
+// ------------------------------------------------------
+
+type ContractExecutorWithPrivateKey struct {
 	ChainExecutor
 	privKey *ecdsa.PrivateKey
 }
 
-func NewChainExecutor(rpcUrl string) Executor {
-	return &ChainExecutor{rpcUrl}
+func NewContractExecutorWithPrivateKey(rpcUrl string, privateKey []byte) Executor {
+	key, err := crypto.ToECDSA(privateKey)
+	if err != nil {
+		panic(err)
+	}
+	return &ContractExecutorWithPrivateKey{ChainExecutor{rpcUrl}, key}
 }
 
-func ExecuteChainRpcWithKeystore(rpcUrl string, keystoreDir string, account common.Address, passphrase string,
-	handler func(*ethclient.Client, *bind.TransactOpts) error) error {
-	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
-	if err != nil {
-		return err
+func (e *ContractExecutorWithPrivateKey) Execute(handler ExecutorHandler) error {
+	h := func(cli *ethclient.Client, auth *bind.TransactOpts) error {
+		return handler(cli, bind.NewKeyedTransactor(e.privKey))
 	}
-	tmp := accounts.Account{Address: account}
-	keyStore := keystore.NewKeyStore(keystoreDir, keystore.StandardScryptN, keystore.StandardScryptP)
-	err = keyStore.Unlock(tmp, passphrase)
-	if err != nil {
-		return err
-	}
-	defer keyStore.Lock(account)
-
-	auth, err := bind.NewKeyStoreTransactor(keyStore, tmp)
-	if err != nil {
-		return err
-	}
-	return handler(cli, auth)
-}
-
-func ExecuteChainRpcWithPrivateKey(rpcUrl string, sk []byte,
-	handler func(*ethclient.Client, *bind.TransactOpts) error) error {
-	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
-	if err != nil {
-		return err
-	}
-
-	priv, err := crypto.ToECDSA(sk)
-	if err != nil {
-		return err
-	}
-
-	auth := bind.NewKeyedTransactor(priv)
-
-	return handler(cli, auth)
+	return e.ChainExecutor.Execute(h)
 }

@@ -1,28 +1,46 @@
 package crypto
 
 import (
-	"os"
-	"path/filepath"
-
+	"github.com/caiyesd/ethcli/utils"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
 var (
 	FlagKeystore = cli.StringFlag{
-		Name:  "ks",
+		Name:  "keystore",
 		Usage: "keystore directory",
 		Value: DefaultKeystore(),
 	}
+	FlagPassword = cli.StringFlag{
+		Name:  "password",
+		Usage: "password file",
+		Value: DefaultPassword(),
+	}
 )
 
-func DefaultHome() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		home = ""
-	}
-	return home
+func ParseFlagKeystore(c *cli.Context) string {
+	return c.Parent().String(FlagKeystore.Name)
 }
 
-func DefaultKeystore() string {
-	return filepath.Join(DefaultHome(), ".ethereum", "keystore")
+func ParseFlagPassword(c *cli.Context) string {
+	return c.Parent().String(FlagPassword.Name)
 }
+
+func ReadPassphrase(c *cli.Context) (string, error) {
+	passwordFile := ParseFlagPassword(c)
+	if passwordFile == "" {
+		return utils.ReadPassphraseFromPrompter()
+	} else {
+		passphrase, err := utils.ReadPassphraseFromFile(passwordFile)
+		if err != nil {
+			return utils.ReadPassphraseFromPrompter()
+		} else {
+			return passphrase, nil
+		}
+	}
+}
+
+var ParseBigInt = utils.ParseBigInt
+var ParseUint64 = utils.ParseUint64
+var DefaultKeystore = utils.DefaultKeystore
+var DefaultPassword = utils.DefaultPassword

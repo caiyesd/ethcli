@@ -8,7 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func PendingBalanceAt(rpcUrl string, account string) error {
+func PendingBalanceAt(rpcUrl, account string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -22,7 +22,7 @@ func PendingBalanceAt(rpcUrl string, account string) error {
 	return nil
 }
 
-func PendingNonceAt(rpcUrl string, account string) error {
+func PendingNonceAt(rpcUrl, account string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func PendingNonceAt(rpcUrl string, account string) error {
 	return nil
 }
 
-func PendingCodeAt(rpcUrl string, account string) error {
+func PendingCodeAt(rpcUrl, account string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func PendingCodeAt(rpcUrl string, account string) error {
 	return nil
 }
 
-func PendingStorageAt(rpcUrl string, account string, key string) error {
+func PendingStorageAt(rpcUrl, account, key string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err

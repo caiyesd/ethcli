@@ -1,6 +1,7 @@
 package chain
 
 import (
+	"github.com/caiyesd/ethcli/utils"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -15,3 +16,14 @@ var (
 		Usage: "get no pending state",
 	}
 )
+
+func ParseFlagRpcAddr(c *cli.Context) string {
+	return c.Parent().String(FlagRpcAddr.Name)
+}
+
+func ParseFlagNoPending(c *cli.Context) bool {
+	return c.BoolT(FlagNoPending.Name)
+}
+
+var ParseBigInt = utils.ParseBigInt
+var ParseUint64 = utils.ParseUint64

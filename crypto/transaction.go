@@ -3,28 +3,35 @@ package crypto
 import (
 	"bytes"
 	"fmt"
-	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 )
 
-func NewTx(nonce uint64, to string, amount string, gasLimit uint64, gasPrice string, data string) error {
-	_amount, ok := new(big.Int).SetString(amount, 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", amount)
+func BuildTx(nonce, to, amount, gasLimit, gasPrice, data string) error {
+	_nonce, err := ParseUint64(nonce)
+	if err != nil {
+		return err
 	}
-	_gasPrice, ok := new(big.Int).SetString(gasPrice, 10)
-	if !ok {
-		return fmt.Errorf("failed to parse %s", gasPrice)
+	_amount, err := ParseBigInt(amount)
+	if err != nil {
+		return err
+	}
+	_gasLimit, err := ParseUint64(gasLimit)
+	if err != nil {
+		return err
+	}
+	_gasPrice, err := ParseBigInt(gasPrice)
+	if err != nil {
+		return err
 	}
 	var _data []byte = nil
 	if data != "" {
 		_data = common.FromHex(data)
 	}
-	tx := types.NewTransaction(nonce, common.HexToAddress(to), _amount, gasLimit, _gasPrice, _data)
+	tx := types.NewTransaction(_nonce, common.HexToAddress(to), _amount, _gasLimit, _gasPrice, _data)
 	buffer := bytes.NewBuffer(nil)
-	err := tx.EncodeRLP(buffer)
+	err = tx.EncodeRLP(buffer)
 	if err != nil {
 		return err
 	}

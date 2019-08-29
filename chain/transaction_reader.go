@@ -28,7 +28,7 @@ func printReceipt(r *types.Receipt) {
 	}
 }
 
-func TransactionByHash(rpcUrl string, hash string) error {
+func TransactionByHash(rpcUrl, hash string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func TransactionByHash(rpcUrl string, hash string) error {
 	return nil
 }
 
-func TransactionReceipt(rpcUrl string, hash string) error {
+func TransactionReceipt(rpcUrl, hash string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err

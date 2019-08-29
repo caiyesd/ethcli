@@ -10,7 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/rlp"
 )
 
-func SendTransaction(rpcUrl string, rawTxStr string) error {
+func SendTransaction(rpcUrl, rawTxStr string) error {
 	cli, err := ethclient.DialContext(context.Background(), rpcUrl)
 	if err != nil {
 		return err

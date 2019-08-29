@@ -16,6 +16,10 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
+var (
+	ErrInsufficientArguments = fmt.Errorf("insufficient arguments")
+)
+
 func TotalSupplyAction(c *cli.Context) error {
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -36,7 +40,7 @@ func TotalSupplyAction(c *cli.Context) error {
 
 func BalanceOfAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -57,7 +61,7 @@ func BalanceOfAction(c *cli.Context) error {
 
 func AllowanceAction(c *cli.Context) error {
 	if c.NArg() < 2 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -78,7 +82,7 @@ func AllowanceAction(c *cli.Context) error {
 
 func TransferAction(c *cli.Context) error {
 	if c.NArg() < 3 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -91,8 +95,8 @@ func TransferAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -125,7 +129,7 @@ func TransferAction(c *cli.Context) error {
 
 func TransferFromAction(c *cli.Context) error {
 	if c.NArg() < 4 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -138,8 +142,8 @@ func TransferFromAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -172,7 +176,7 @@ func TransferFromAction(c *cli.Context) error {
 
 func ApproveAction(c *cli.Context) error {
 	if c.NArg() < 3 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -185,8 +189,8 @@ func ApproveAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -237,7 +241,7 @@ func PausedAction(c *cli.Context) error {
 
 func IsPauserAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -258,7 +262,7 @@ func IsPauserAction(c *cli.Context) error {
 
 func AddPauserAction(c *cli.Context) error {
 	if c.NArg() < 2 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -271,8 +275,8 @@ func AddPauserAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -300,7 +304,7 @@ func AddPauserAction(c *cli.Context) error {
 
 func RenouncePauserAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -313,8 +317,8 @@ func RenouncePauserAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -342,7 +346,7 @@ func RenouncePauserAction(c *cli.Context) error {
 
 func PauseAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -355,8 +359,8 @@ func PauseAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -384,7 +388,7 @@ func PauseAction(c *cli.Context) error {
 
 func UnpauseAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -397,8 +401,8 @@ func UnpauseAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -426,7 +430,7 @@ func UnpauseAction(c *cli.Context) error {
 
 func IsMinterAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -447,7 +451,7 @@ func IsMinterAction(c *cli.Context) error {
 
 func MintAction(c *cli.Context) error {
 	if c.NArg() < 3 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -460,8 +464,8 @@ func MintAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -494,7 +498,7 @@ func MintAction(c *cli.Context) error {
 
 func AddMinterAction(c *cli.Context) error {
 	if c.NArg() < 2 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -507,8 +511,8 @@ func AddMinterAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -536,7 +540,7 @@ func AddMinterAction(c *cli.Context) error {
 
 func RenounceMinterAction(c *cli.Context) error {
 	if c.NArg() < 1 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -549,8 +553,8 @@ func RenounceMinterAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -578,7 +582,7 @@ func RenounceMinterAction(c *cli.Context) error {
 
 func BurnAction(c *cli.Context) error {
 	if c.NArg() < 2 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -591,8 +595,8 @@ func BurnAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}
@@ -625,7 +629,7 @@ func BurnAction(c *cli.Context) error {
 
 func BurnFromAction(c *cli.Context) error {
 	if c.NArg() < 3 {
-		return fmt.Errorf("insufficient arguments")
+		return ErrInsufficientArguments
 	}
 	cli, err := ethclient.DialContext(context.Background(), c.Parent().String(FlagRpcAddr.Name))
 	if err != nil {
@@ -638,8 +642,8 @@ func BurnFromAction(c *cli.Context) error {
 	}
 
 	keyStore := keystore.NewKeyStore(c.Parent().String(FlagKeystore.Name), keystore.StandardScryptN, keystore.StandardScryptP)
-	t := NewTerminalPrompter()
-	passphrase, err := t.PromptPassphrase("passphrase: ")
+
+	passphrase, err := ReadPassphrase(c)
 	if err != nil {
 		return err
 	}

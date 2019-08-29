@@ -1,4 +1,4 @@
-package erc20
+package utils
 
 import (
 	"fmt"
