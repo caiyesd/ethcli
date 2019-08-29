@@ -3,6 +3,7 @@ package chain
 import (
 	"bytes"
 	"context"
+	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -26,5 +27,6 @@ func SendTransaction(rpcUrl, rawTxStr string) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println(tx.Hash().String())
 	return nil
 }
