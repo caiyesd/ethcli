@@ -109,7 +109,9 @@ func PackArguments(args []string) error {
 			}
 			values = append(values, value)
 			break
-
+		case "string":
+			values = append(values, args[i*2+1])
+			break
 		default:
 			return fmt.Errorf("unsupported type %s", args[i*2])
 		}
